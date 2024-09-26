@@ -1,0 +1,20 @@
+body {
+    display: flex;
+}
+
+button {
+    margin: 1em;
+}
+
+#library {
+    width: 50%;
+}
+
+#formcont {
+    display: none;
+}
+
+label {
+    display: block;
+    padding-top: 1em;
+}
