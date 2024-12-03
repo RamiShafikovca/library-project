@@ -9,9 +9,6 @@ function Book(title, author, pages, read) {
     this.author = author;
     this.pages = pages;
     this.read = read;
-    this.info = function () {
-        return title + " by " + author + ", " + pages + " pages, " + (read ? "read" : "not read yet");
-    };
 }
 
 function addBookToLibrary() {
@@ -31,17 +28,22 @@ function displayLibrary() {
         const readBtn = document.createElement("button");
 
         bookEntry.style.display = "inline";
-        bookEntry.innerHTML = myLibrary[i].info();
-        bookEntry.setAttribute("data-num", i);
+        bookEntry.innerHTML = myLibrary[i].title + " by " + myLibrary[i].author + ", " + myLibrary[i].pages + " pages, " + myLibrary[i].read;
+        bookElem.setAttribute("data-num", i);
 
-        removeBtn.innerHTML = "Remove";   
+        removeBtn.innerHTML = "Remove";
         removeBtn.addEventListener("click", () => {
             myLibrary.splice(removeBtn.parentElement.getAttribute("data-num"), 1);
             displayLibrary();
         });
+
         readBtn.innerHTML = "Toggle Read";
         readBtn.addEventListener("click", () => {
-            myLibrary[readBtn.parentElement.getAttribute("data-num")].read = !myLibrary[readBtn.parentElement.getAttribute("data-num")].read;
+            if (myLibrary[readBtn.parentElement.getAttribute("data-num")].read == "read") {
+                myLibrary[readBtn.parentElement.getAttribute("data-num")].read = "not read yet";
+            } else {
+                myLibrary[readBtn.parentElement.getAttribute("data-num")].read = "read";
+            }
             displayLibrary();
         });
 
@@ -59,13 +61,16 @@ newBook.addEventListener("click", () => {
 bookForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const fields = event.target.elements;
-    myLibrary.push(new Book(fields.title.value, fields.author.value, fields.pages.value, fields.read.value.toLowerCase() == "true" ? true : false));
+    if (fields.read.value.toLowerCase() == 'true') {
+        myLibrary.push(new Book(fields.title.value, fields.author.value, fields.pages.value, "read"));
+    } else {
+        myLibrary.push(new Book(fields.title.value, fields.author.value, fields.pages.value, "not read yet"));
+    }
     bookForm.reset();
     formCont.style.display = "none";
     displayLibrary();
 });
 
-
-myLibrary[0] = new Book("The Hobbit", "J.R.R. Tolkien", 295, false);
-myLibrary[1] = new Book("1984", "George Orwell", 328, true);
+myLibrary[0] = new Book("The Hobbit", "J.R.R. Tolkien", 295, "read");
+myLibrary[1] = new Book("1984", "George Orwell", 328, "not read yet");  
 displayLibrary();
